@@ -1,0 +1,1 @@
+1、java 虚拟机不允许包名以java开头。否则会报java.lang.SecurityException: Prohibited package name: java.lang 异常

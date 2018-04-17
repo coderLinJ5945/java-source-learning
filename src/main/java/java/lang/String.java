@@ -23,7 +23,6 @@
  *
  */
 package java.lang;
-
 import java.io.ObjectStreamField;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -35,12 +34,24 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+/**
+ * 学习参考网址：
+ * 1.String字符串常量池：https://segmentfault.com/a/1190000009888357
+ * 2.String源码方法分析：https://www.cnblogs.com/NiceCui/p/8046564.html
+ */
 
 /**
- * The <code>String</code> class represents character strings. All
- * string literals in Java programs, such as <code>"abc"</code>, are
- * implemented as instances of this class.
- * <p>
+ * String 字符串类：
+ * 实例："abc"
+ * 概念：
+ * 一、字符串常量池：（可以理解成类似基础数据类的的常量）
+ * 常量池特点：
+ * 1.常量池中的常量是不可改变
+ * 2.常量池中的常量是可以动态创建的
+ * 3.理解的3个概念 常量池、堆、栈
+ *
+ *
+ * 字符串缓冲区：
  * Strings are constant; their values cannot be changed after they
  * are created. String buffers support mutable strings.
  * Because String objects are immutable they can be shared. For example:
@@ -107,10 +118,14 @@ import java.util.regex.PatternSyntaxException;
 
 public final class String
         implements java.io.Serializable, Comparable<String>, CharSequence {
+
+
     /** The value is used for character storage. */
+    /*用final修饰不可变的char数据用于存放字符串常量*/
     private final char value[];
 
     /** Cache the hash code for the string */
+    /*int 类型存储hash值*/
     private int hash; // Default to 0
 
     /** use serialVersionUID from JDK 1.0.2 for interoperability */
@@ -131,11 +146,14 @@ public final class String
     private static final ObjectStreamField[] serialPersistentFields =
             new ObjectStreamField[0];
 
+
+    /*多种构造方法*/
     /**
      * Initializes a newly created {@code String} object so that it represents
      * an empty character sequence.  Note that use of this constructor is
      * unnecessary since Strings are immutable.
      */
+
     public String() {
         this.value = new char[0];
     }
@@ -302,10 +320,10 @@ public final class String
      *          If the {@code offset} or {@code count} argument is invalid
      *
      * @see  #String(byte[], int)
-     * @see  #String(byte[], int, int, java.lang.String)
+     * @see  #String(byte[], int, int, String)
      * @see  #String(byte[], int, int, java.nio.charset.Charset)
      * @see  #String(byte[], int, int)
-     * @see  #String(byte[], java.lang.String)
+     * @see  #String(byte[], String)
      * @see  #String(byte[], java.nio.charset.Charset)
      * @see  #String(byte[])
      */
@@ -350,13 +368,14 @@ public final class String
      * @param  hibyte
      *         The top 8 bits of each 16-bit Unicode code unit
      *
-     * @see  #String(byte[], int, int, java.lang.String)
+     * @see  #String(byte[], int, int, String)
      * @see  #String(byte[], int, int, java.nio.charset.Charset)
      * @see  #String(byte[], int, int)
-     * @see  #String(byte[], java.lang.String)
+     * @see  #String(byte[], String)
      * @see  #String(byte[], java.nio.charset.Charset)
      * @see  #String(byte[])
      */
+    /*添加 @Deprecated表示该方法不建议使用，或者在新版本中有替代的方法*/
     @Deprecated
     public String(byte ascii[], int hibyte) {
         this(ascii, hibyte, 0, ascii.length);
@@ -366,6 +385,7 @@ public final class String
      * and requested offset & length values used by the String(byte[],..)
      * constructors.
      */
+    /*常用的检测字节数组方法*/
     private static void checkBounds(byte[] bytes, int offset, int length) {
         if (length < 0)
             throw new StringIndexOutOfBoundsException(length);
@@ -596,6 +616,19 @@ public final class String
     * a separate constructor is needed because we already have a public
     * String(char[]) constructor that makes a copy of the given char[].
     */
+    /*私有的String 两个作用：
+    * 直接给数组赋值（相当于直接将String的value的指针指向char[]数组）性能好
+    * 性能是和copy方法进行比较：
+    * public static char[] copyOf(char[] original, int newLength) {
+        char[] copy = new char[newLength];
+        System.arraycopy(original, 0, copy, 0,
+                         Math.min(original.length, newLength));
+        return copy;
+    }
+    *
+    *
+    * 共享背部数组，节约内存
+    * */
     String(char[] value, boolean share) {
         // assert share : "unshared not supported";
         this.value = value;
@@ -2402,9 +2435,9 @@ public final class String
      *
      * @param locale use the case transformation rules for this locale
      * @return the <code>String</code>, converted to lowercase.
-     * @see     java.lang.String#toLowerCase()
-     * @see     java.lang.String#toUpperCase()
-     * @see     java.lang.String#toUpperCase(Locale)
+     * @see     String#toLowerCase()
+     * @see     String#toUpperCase()
+     * @see     String#toUpperCase(Locale)
      * @since   1.1
      */
     public String toLowerCase(Locale locale) {
@@ -2513,7 +2546,7 @@ public final class String
      * <code>toLowerCase(Locale.ENGLISH)</code>.
      * <p>
      * @return  the <code>String</code>, converted to lowercase.
-     * @see     java.lang.String#toLowerCase(Locale)
+     * @see     String#toLowerCase(Locale)
      */
     public String toLowerCase() {
         return toLowerCase(Locale.getDefault());
@@ -2562,9 +2595,9 @@ public final class String
      * </table>
      * @param locale use the case transformation rules for this locale
      * @return the <code>String</code>, converted to uppercase.
-     * @see     java.lang.String#toUpperCase()
-     * @see     java.lang.String#toLowerCase()
-     * @see     java.lang.String#toLowerCase(Locale)
+     * @see     String#toUpperCase()
+     * @see     String#toLowerCase()
+     * @see     String#toLowerCase(Locale)
      * @since   1.1
      */
     public String toUpperCase(Locale locale) {
@@ -2676,7 +2709,7 @@ public final class String
      * <code>toUpperCase(Locale.ENGLISH)</code>.
      * <p>
      * @return  the <code>String</code>, converted to uppercase.
-     * @see     java.lang.String#toUpperCase(Locale)
+     * @see     String#toUpperCase(Locale)
      */
     public String toUpperCase() {
         return toUpperCase(Locale.getDefault());
