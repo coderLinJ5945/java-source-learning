@@ -627,7 +627,7 @@ public final class String
     }
     *
     *
-    * 共享背部数组，节约内存
+    * 共享数组，节约内存
     * */
     String(char[] value, boolean share) {
         // assert share : "unshared not supported";
@@ -664,6 +664,7 @@ public final class String
      *
      * @since 1.6
      */
+    /*根据字符串常量数组的length判断非空 */
     public boolean isEmpty() {
         return value.length == 0;
     }
@@ -686,6 +687,7 @@ public final class String
      *             argument is negative or not less than the length of this
      *             string.
      */
+    /*charAt(int index) 返回下标的字符  */
     public char charAt(int index) {
         if ((index < 0) || (index >= value.length)) {
             throw new StringIndexOutOfBoundsException(index);
@@ -1004,17 +1006,33 @@ public final class String
      * @see  #compareTo(String)
      * @see  #equalsIgnoreCase(String)
      */
+    /*
+    *
+    */
     public boolean equals(Object anObject) {
+        // 1、判断引用，这里可以引申出， if a == b ,a.equals(b)必定为true
         if (this == anObject) {
             return true;
         }
+        ///2、判断 String类型
         if (anObject instanceof String) {
             String anotherString = (String) anObject;
+            //这里的 value 相当于a.equals(b) 中的a对象
             int n = value.length;
+            // 3、判断长度
             if (n == anotherString.value.length) {
+                //4、while循环比较 char[]中的每一个元素
                 char v1[] = value;
                 char v2[] = anotherString.value;
                 int i = 0;
+                /**
+                 * 这里有个待验证的疑问：
+                 * 这里的char 数组的循环为什么是从最后一个往前循环？
+                 * 猜测：
+                 * 数组的底层实现 采用的是先进后出的方式（压栈），所以从后往前取数据要优于从前往后取数据
+                 * 验证：
+                 * todo
+                 */
                 while (n-- != 0) {
                     if (v1[i] != v2[i])
                         return false;

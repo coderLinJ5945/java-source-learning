@@ -1,1 +1,9 @@
 1、java 虚拟机不允许包名以java开头。否则会报java.lang.SecurityException: Prohibited package name: java.lang 异常
+
+2、java SE帮助文档（todo）：（有些看不懂啊，全英文，后续学习）
+https://docs.oracle.com/javase/7/docs/
+https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html#jvms-6.5.instanceof
+
+3、java关键字学习（todo）：
+https://blog.csdn.net/u012506661/article/details/52756452
+https://www.zhihu.com/question/21574535 （instanceof 关键字的例子）
